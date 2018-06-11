@@ -1,10 +1,11 @@
 import express from 'express'
-import Controllers from './controllers'
-import Routes from './routes'
+import routes from './config/routes'
+import database from './config/database'
 import parser from 'body-parser'
 
+database.init()
+
 const app = express()
-app.controllers = Controllers 
 let port = process.env.PORT || 3000
 
 // app.use(parser.urlencoded({extend: false}))
@@ -14,5 +15,6 @@ app.listen(port, () => {
   console.log('server started...happy hunting') 
 })
 
-const router = express.Router()
-Routes.create(app, router)
+const router = routes.init()
+app.use('/api', router)
+

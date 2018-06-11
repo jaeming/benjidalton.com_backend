@@ -1,9 +1,9 @@
 import express from 'express'
-import Controllers from './controllers'
+import Controllers from '../controllers'
 
 export default {
 
-  create() {
+  init() {
     this.router = express.Router()
     this.list.forEach((route) => {
       this.setRoute(route)

@@ -1,31 +1,30 @@
+import Comment from '../models/comment'
 export default {
 
   index (req, resp) {
-    resp.json({
-      comments: [
-        {
-          body: 'umbrellas for rain',
-          id: 1
-        },
-        {
-          body: 'sushi is lovely',
-          id: 2
-        }
-      ]
+    let comments = Comment.find( (err, comments) => {
+      if (err) {
+        resp.send(err)
+      }
+      resp.json(comments)
     })
   },
   
   show (req, resp) {
-    console.log(req.params)
-    resp.json({
-      message: `this would be comment: ${req.params.id}`
+    Comment.findById(req.params.id, (err, comment) => {
+      if (err) {
+        resp.send(err)
+      }
+      resp.json(comment)
     })
   },
 
   create (req, resp) {
-    console.log('here we would create a comment')
+    let comment = new Comment()
+    comment.text = req.body.text
+    comment.save()
     resp.json({
-      params: req.body,
+      comment: comment,
       message: 'created'
     })
   }
