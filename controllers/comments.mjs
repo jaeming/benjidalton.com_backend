@@ -2,21 +2,17 @@ import Comment from '../models/comment'
 export default {
 
   index (req, resp) {
-    let comments = Comment.find( (err, comments) => {
-      if (err) {
-        resp.send(err)
-      }
-      resp.json(comments)
-    })
+    let query = Comment.find()
+    query.exec()
+      .then((comments) => resp.json(comments))
+      .catch((error) => resp.send(error))
   },
   
   show (req, resp) {
-    Comment.findById(req.params.id, (err, comment) => {
-      if (err) {
-        resp.send(err)
-      }
-      resp.json(comment)
-    })
+    let query = Comment.findById(req.params.id)
+    query.exec()
+      .then((comment) => resp.json(comment))
+      .catch((error) => resp.send(error))
   },
 
   create (req, resp) {

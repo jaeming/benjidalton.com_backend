@@ -1,8 +1,8 @@
-import mongoose from 'mongoose'
-const Schema = mongoose.Schema
+import db from 'mongoose'
+const Schema = db.Schema
 
 const CommentSchema = new Schema({
   text: String
 })
 
-export default mongoose.model('Comment', CommentSchema)
+export default db.model('Comment', CommentSchema)
