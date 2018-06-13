@@ -8,13 +8,13 @@ database.init()
 const app = express()
 let port = process.env.PORT || 3000
 
-// app.use(parser.urlencoded({extend: false}))
+// app.set('superSecret', secrets.jwt)
+
 app.use(parser.json())
 
 app.listen(port, () => {
-  console.log('server started...happy hunting') 
+  console.log('server started...happy hunting')
 })
 
 const router = routes.init()
 app.use('/api', router)
-

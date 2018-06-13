@@ -51,6 +51,28 @@ export default {
       controller: 'comments',
       action: 'create',
       type: 'post',
+    },
+    {
+      name: 'register',
+      path: '/users',
+      controller: 'users',
+      action: 'create',
+      type: 'post'
+    },
+    {
+      name: 'userUpdate',
+      path: '/users',
+      controller: 'users',
+      action: 'update',
+      type: 'put'
     }
+    {
+      name: 'login',
+      path: '/sessions',
+      controller: 'sessions',
+      action: 'create',
+      type: 'post'
+    },
+
   ]
 }
