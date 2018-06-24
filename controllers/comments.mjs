@@ -1,13 +1,22 @@
 import Comment from '../models/comment'
+import Auth from '../lib/auth'
+
 export default {
 
   index (req, resp) {
-    let query = Comment.find()
-    query.exec()
-      .then((comments) => resp.json(comments))
-      .catch((error) => resp.send(error))
+    Auth.verify(req.headers.authorization)
+      .then((result) => {
+        console.log(result)
+        let query = Comment.find()
+        query.exec()
+          .then((comments) => resp.json(comments))
+          .catch((error) => resp.send(error))
+      })
+      .catch((error) => {
+        resp.send(error)
+      })
   },
-  
+
   show (req, resp) {
     let query = Comment.findById(req.params.id)
     query.exec()
@@ -17,6 +26,7 @@ export default {
 
   create (req, resp) {
     let comment = new Comment()
+    console.log(req.body)
     comment.text = req.body.text
     comment.save()
     resp.json({

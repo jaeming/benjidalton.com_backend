@@ -3,7 +3,7 @@ import Controllers from '../controllers'
 
 export default {
 
-  init() {
+  init () {
     this.router = express.Router()
     this.list.forEach((route) => {
       this.setRoute(route)
@@ -14,7 +14,7 @@ export default {
     return this.router
   },
 
-  setRoute(route, router) {
+  setRoute (route, router) {
     console.log(`${route.name} - ${route.type}: ${route.path}`)
     this.router[route.type](route.path, (request, response) => {
       Controllers[route.controller][route.action](request, response)
@@ -22,7 +22,7 @@ export default {
   },
 
   list: [
-    { 
+    {
       name: 'root',
       path: '/',
       controller: 'root',
@@ -50,7 +50,7 @@ export default {
       path: '/comments',
       controller: 'comments',
       action: 'create',
-      type: 'post',
+      type: 'post'
     },
     {
       name: 'register',
@@ -65,14 +65,21 @@ export default {
       controller: 'users',
       action: 'update',
       type: 'put'
-    }
+    },
+    {
+      name: 'users',
+      path: '/users',
+      controller: 'users',
+      action: 'index',
+      type: 'get'
+    },
     {
       name: 'login',
       path: '/sessions',
       controller: 'sessions',
       action: 'create',
       type: 'post'
-    },
+    }
 
   ]
 }

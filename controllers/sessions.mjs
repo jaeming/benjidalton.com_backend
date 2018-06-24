@@ -1,29 +1,21 @@
-import jwt from 'jsonwebtoken'
-import secrets from '../config/secrets'
 import User from '../models/user'
+import Auth from '../lib/auth'
 
 export default {
 
   create (req, resp) {
-    let query = User.findOne({email: req.params.email})
+    let query = User.findOne({email: req.body.email})
     query.exec()
       .then((user) => {
-        let session = authenticate(user, req.body.password)
-        resp.json(session)
+        Auth.createToken(user, req.body.password)
+          .then((session) => resp.json(session))
+          .catch((error) => resp.send(error))
       })
       .catch((error) => resp.send(error))
   },
 
   show () {
 
-  },
-
-  authenticate (user, password) {
-    let passwordMatch = bcrypt.compareSync(password, user.password)
-    if (passwordMatch) {
-      let token = jwt.sign({id: user.id}, secrets.jwt)
-      return { token }
-    }
   }
 
 }
