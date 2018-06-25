@@ -23,9 +23,9 @@ export default {
 
   list: [
     {
-      name: 'root',
+      name: 'home',
       path: '/',
-      controller: 'root',
+      controller: 'home',
       action: 'show',
       type: 'get'
     },
@@ -79,6 +79,20 @@ export default {
       controller: 'sessions',
       action: 'create',
       type: 'post'
+    },
+    {
+      name: 'postCreate',
+      path: '/posts',
+      controller: 'posts',
+      action: 'create',
+      type: 'post'
+    },
+    {
+      name: 'postsIndex',
+      path: '/posts',
+      controller: 'posts',
+      action: 'index',
+      type: 'get'
     }
 
   ]

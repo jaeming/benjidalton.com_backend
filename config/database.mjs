@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 export default {
-  init() {
+  init () {
     mongoose.connect(process.env.MONGODB)
     mongoose.Promise = global.Promise
     let db = mongoose.connection

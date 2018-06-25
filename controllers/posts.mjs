@@ -1,3 +1,4 @@
+import Auth from '../lib/auth'
 import Post from '../models/post'
 
 export default {
@@ -16,16 +17,21 @@ export default {
       .catch((error) => resp.send(error))
   },
 
-  create (req, resp) {
-    let post = new Post({
-      title: req.body.title,
-      body: req.body.body
-      // author: currentUser._id
-    })
-
-    resp.json({
-      post: post,
-      message: 'created'
-    })
+  async create (req, resp) {
+    const CurrentUser = await Auth.verify(req.headers.authorization)
+    if (CurrentUser && CurrentUser.id) {
+      let post = new Post({
+        title: req.body.title,
+        body: req.body.body,
+        author: CurrentUser.id
+      })
+      post.save()
+      resp.json({
+        post: post,
+        message: 'created'
+      })
+    } else {
+      resp.status(401).json({error: 'User not Authorized'})
+    }
   }
 }

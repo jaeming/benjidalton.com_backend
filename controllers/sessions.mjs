@@ -7,9 +7,8 @@ export default {
     let query = User.findOne({email: req.body.email})
     query.exec()
       .then((user) => {
-        Auth.createToken(user, req.body.password)
-          .then((session) => resp.json(session))
-          .catch((error) => resp.send(error))
+        const session = Auth.createToken(user, req.body.password)
+        resp.json(session)
       })
       .catch((error) => resp.send(error))
   },

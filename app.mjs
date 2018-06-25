@@ -8,8 +8,6 @@ database.init()
 const app = express()
 let port = process.env.PORT || 3000
 
-// app.set('superSecret', secrets.jwt)
-
 app.use(parser.json())
 
 app.listen(port, () => {

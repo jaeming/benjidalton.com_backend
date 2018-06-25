@@ -3,11 +3,9 @@ import User from '../models/user'
 
 export default {
 
-  index (req, resp) {
-    let query = User.find()
-    query.exec()
-      .then((comments) => resp.json(comments))
-      .catch((error) => resp.send(error))
+  async index (req, resp) {
+    const users = await User.find()
+    resp.json(users)
   },
 
   create (req, resp) {
