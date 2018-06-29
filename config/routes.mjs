@@ -92,7 +92,16 @@ export default {
       path: '/posts',
       controller: 'posts',
       action: 'index',
-      type: 'get'
+      type: 'get',
+      children: [
+        {
+          name: 'postsShow',
+          path: '/posts/:id',
+          controller: 'posts',
+          action: 'show',
+          type: 'get'
+        }
+      ]
     }
 
   ]

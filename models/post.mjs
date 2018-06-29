@@ -6,7 +6,8 @@ const postSchema = new Schema({
   body: String,
   date: { type: Date, default: Date.now },
   published: Boolean,
-  author: { type: Schema.Types.ObjectId, ref: 'User' }
+  author: { type: Schema.Types.ObjectId, ref: 'User' },
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
 })
 
 export default db.model('Post', postSchema)
