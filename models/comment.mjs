@@ -5,7 +5,7 @@ const CommentSchema = new Schema({
   text: String,
   post: { type: Schema.Types.ObjectId, ref: 'Post' },
   author: { type: Schema.Types.ObjectId, ref: 'User' },
-  created: { type: Date, default: Date.now },
+  created: { type: Date, default: Date.now() },
   edited: Date
 })
 

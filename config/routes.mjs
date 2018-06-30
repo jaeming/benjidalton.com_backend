@@ -37,11 +37,18 @@ export default {
       type: 'get',
       children: [
         {
-          name: 'comment',
+          name: 'commentShow',
           path: `/comments/:id`,
           controller: 'comments',
           action: 'show',
           type: 'get'
+        },
+        {
+          name: 'commentUpdate',
+          path: `/comments/:id`,
+          controller: 'comments',
+          action: 'update',
+          type: 'put'
         }
       ]
     },
