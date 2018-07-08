@@ -1,23 +1,19 @@
 import Auth from '../lib/auth'
 import Post from '../models/post'
+import User from '../models/user'
+import helpers from '../helpers'
 import serializer from '../serializers/post'
 
 export default {
 
-  index (req, resp) {
-    let query = Post.find().populate('author')
-    query.exec()
-      .then((posts) => resp.json(posts))
-      .catch((error) => resp.send(error))
+  async index (req, resp) {
+    let posts = await Post.find().populate('author')
+    let json = serializer.index(posts)
+    resp.json(json)
   },
 
   async show (req, resp) {
-    let post = await Post.findById(req.params.id)
-      .populate('author')
-      .populate({
-        path: 'comments',
-        populate: {path: 'author'}
-      })
+    let post = await Post.findOne({slug: req.params.slug}).populate('author')
     let json = serializer.show(post)
     resp.json(json)
   },
@@ -33,10 +29,27 @@ export default {
       body: req.body.body,
       author: CurrentUser.id
     })
+    post.slug = helpers.slugify(req.body.title)
     post.save()
     resp.json({
       post: post,
       message: 'created'
     })
+  },
+
+  async delete (req, resp) {
+    let token = await Auth.verify(req.headers.authorization)
+    const currentUser = await User.findById(token.id)
+    if (!currentUser) {
+      resp.status(401).json({error: 'User not Authorized'})
+      return
+    }
+    let post = await Post.find({slug: req.params.slug}).populate('author')
+    if ((post.author._id === currentUser._id) || currentUser.admin) {
+      post.remove()
+      resp.json({delete: 'ok'})
+    } else {
+      resp.status(401).json({error: 'Not Authorized'})
+    }
   }
 }

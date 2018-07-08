@@ -103,10 +103,17 @@ export default {
       children: [
         {
           name: 'postsShow',
-          path: '/posts/:id',
+          path: '/posts/:slug',
           controller: 'posts',
           action: 'show',
           type: 'get'
+        },
+        {
+          name: 'postsDelete',
+          path: '/posts/:slug',
+          controller: 'posts',
+          action: 'delete',
+          type: 'delete'
         }
       ]
     }

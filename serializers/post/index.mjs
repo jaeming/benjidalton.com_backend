@@ -1,4 +1,6 @@
-import {show} from './show'
+import {show} from './post-show'
+import {index} from './post-index'
 export default {
-  show
+  show,
+  index
 }

@@ -6,6 +6,7 @@ const postSchema = new Schema({
   body: String,
   date: { type: Date, default: Date.now },
   published: Boolean,
+  slug: { type: String, unique: true, index: true },
   author: { type: Schema.Types.ObjectId, ref: 'User' },
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
 })

@@ -6,7 +6,7 @@ import parser from 'body-parser'
 database.init()
 
 const app = express()
-let port = process.env.PORT || 3000
+let port = process.env.PORT || 3030
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
