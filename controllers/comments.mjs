@@ -55,7 +55,6 @@ export default {
       if ((currentUser._id === comment.author._id) || currentUser.admin) {
         comment.text = req.body.text
         comment.edited = Date.now()
-        console.log(comment)
         comment.save()
         resp.json({
           comment: comment,

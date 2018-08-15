@@ -2,17 +2,14 @@ import express from 'express'
 import routes from './config/routes'
 import database from './config/database'
 import parser from 'body-parser'
+import cors from 'cors'
 
 database.init()
 
 const app = express()
 let port = process.env.PORT || 3030
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  next()
-})
+app.use(cors())
 
 app.use(parser.json())
 
