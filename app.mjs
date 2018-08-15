@@ -1,9 +1,11 @@
+import dotenv from 'dotenv'
 import express from 'express'
 import routes from './config/routes'
 import database from './config/database'
 import parser from 'body-parser'
 import cors from 'cors'
 
+dotenv.config()
 database.init()
 
 const app = express()
