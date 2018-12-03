@@ -8,20 +8,29 @@ export default {
     resp.json(users)
   },
 
-  create (req, resp) {
-    let user = User.create(this.userParams(req.body))
-    resp.json(user)
+  async create (req, resp) {
+    try {
+      const user = await User.create(this.userParams(req.body))
+      const {id, email, name, roles} = user
+      resp.json({id, email, name, roles})
+    } catch (err) {
+      if (err.code === 11000) {
+        resp.status(500).json({error: 'User already exists'})
+      } else {
+        resp.status(500).json({error: err})
+      }
+    }
   },
 
   update () {
-
+    // todo
   },
 
   userParams (attr) {
     return {
       name: attr.name,
       email: attr.email,
-      admin: true,
+      roles: ['commenter'],
       password: bcrypt.hashSync(attr.password, 8)
     }
   }

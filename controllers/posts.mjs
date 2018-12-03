@@ -45,7 +45,7 @@ export default {
       return
     }
     let post = await Post.find({slug: req.params.slug}).populate('author')
-    if ((post.author._id === currentUser._id) || currentUser.admin) {
+    if ((post.author._id === currentUser._id) || currentUser.roles.includes('admin')) {
       post.remove()
       resp.json({delete: 'ok'})
     } else {

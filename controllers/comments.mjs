@@ -52,7 +52,7 @@ export default {
         return
       }
       const comment = await Comment.findById(req.params.id).populate('author')
-      if ((currentUser._id === comment.author._id) || currentUser.admin) {
+      if ((currentUser._id === comment.author._id) || currentUser.roles.includes('admin')) {
         comment.text = req.body.text
         comment.edited = Date.now()
         comment.save()
