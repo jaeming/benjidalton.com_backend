@@ -27,9 +27,11 @@ export default {
     let post = new Post({
       title: req.body.title,
       body: req.body.body,
-      author: CurrentUser.id
+      published: req.body.published,
+      slug: helpers.slugify(req.body.title),
+      author: CurrentUser.id,
+      date: Date.now()
     })
-    post.slug = helpers.slugify(req.body.title)
     post.save()
     resp.json({
       post: post,
