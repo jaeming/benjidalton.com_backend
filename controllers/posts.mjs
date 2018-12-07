@@ -1,6 +1,5 @@
 import Auth from '../lib/auth'
 import Post from '../models/post'
-import User from '../models/user'
 import helpers from '../helpers'
 import serializer from '../serializers/post'
 
@@ -19,37 +18,40 @@ export default {
   },
 
   async create (req, resp) {
-    const user = await Auth.verify(req.headers.authorization)
+    let user = this.user(req)
     if (user && user.roles.includes('admin')) {
-      let post = new Post({
-        title: req.body.title,
-        body: req.body.body,
-        published: req.body.published,
-        slug: helpers.slugify(req.body.title),
-        author: user.id,
-        date: Date.now()
-      })
+      let post = new Post(this.postParams(req.body))
+      post.author = user.id
       post.save()
-      resp.json({
-        post: post,
-        message: 'created'
-      })
+      resp.json({post, message: 'created'})
     } else {
       resp.status(401).json({error: 'User not Authorized'})
     }
   },
 
   async delete (req, resp) {
-    let token = await Auth.verify(req.headers.authorization)
-    const user = await User.findById(token.id)
+    let user = this.user(req)
+    if (!user) { return resp.status(401).json({error: 'User not Authorized'}) }
     let post = await Post.findOne({slug: req.params.slug}).populate('author')
-    const admin = user.roles.includes('admin')
-    const owner = post.author.equals(user._id)
-    if (user && admin && owner) {
+    if (user.roles.includes('admin') || post.author.equals(user.id)) {
       post.remove()
       resp.json({delete: 'ok'})
     } else {
       resp.status(401).json({error: 'User not Authorized'})
     }
+  },
+
+  postParams (attr) {
+    return {
+      title: attr.title,
+      body: attr.body,
+      published: attr.published,
+      slug: helpers.slugify(attr.title),
+      date: Date.now()
+    }
+  },
+
+  user (req) {
+    return Auth.verify(req.headers.authorization)
   }
 }
