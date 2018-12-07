@@ -19,39 +19,37 @@ export default {
   },
 
   async create (req, resp) {
-    const CurrentUser = await Auth.verify(req.headers.authorization)
-    if (!CurrentUser) {
+    const user = await Auth.verify(req.headers.authorization)
+    if (user && user.roles.includes('admin')) {
+      let post = new Post({
+        title: req.body.title,
+        body: req.body.body,
+        published: req.body.published,
+        slug: helpers.slugify(req.body.title),
+        author: user.id,
+        date: Date.now()
+      })
+      post.save()
+      resp.json({
+        post: post,
+        message: 'created'
+      })
+    } else {
       resp.status(401).json({error: 'User not Authorized'})
-      return
     }
-    let post = new Post({
-      title: req.body.title,
-      body: req.body.body,
-      published: req.body.published,
-      slug: helpers.slugify(req.body.title),
-      author: CurrentUser.id,
-      date: Date.now()
-    })
-    post.save()
-    resp.json({
-      post: post,
-      message: 'created'
-    })
   },
 
   async delete (req, resp) {
     let token = await Auth.verify(req.headers.authorization)
-    const currentUser = await User.findById(token.id)
-    if (!currentUser) {
-      resp.status(401).json({error: 'User not Authorized'})
-      return
-    }
-    let post = await Post.find({slug: req.params.slug}).populate('author')
-    if ((post.author._id === currentUser._id) || currentUser.roles.includes('admin')) {
+    const user = await User.findById(token.id)
+    let post = await Post.findOne({slug: req.params.slug}).populate('author')
+    const admin = user.roles.includes('admin')
+    const owner = post.author.equals(user._id)
+    if (user && admin && owner) {
       post.remove()
       resp.json({delete: 'ok'})
     } else {
-      resp.status(401).json({error: 'Not Authorized'})
+      resp.status(401).json({error: 'User not Authorized'})
     }
   }
 }
