@@ -29,6 +29,19 @@ export default {
     }
   },
 
+  async update (req, resp) {
+    let user = this.user(req)
+    if (!user) { return resp.status(401).json({error: 'User not Authorized'}) }
+    let post = await Post.findOne({slug: req.params.slug}).populate('author')
+    if (user.roles.includes('admin') || post.author.equals(user.id)) {
+      Object.assign(post, this.postParams(req.body))
+      await post.save()
+      resp.json({post, message: 'updated'})
+    } else {
+      resp.status(401).json({error: 'User not Authorized'})
+    }
+  },
+
   async delete (req, resp) {
     let user = this.user(req)
     if (!user) { return resp.status(401).json({error: 'User not Authorized'}) }

@@ -109,6 +109,13 @@ export default {
           type: 'get'
         },
         {
+          name: 'postsUpdate',
+          path: '/posts/:slug',
+          controller: 'posts',
+          action: 'update',
+          type: 'patch'
+        },
+        {
           name: 'postsDelete',
           path: '/posts/:slug',
           controller: 'posts',
