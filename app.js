@@ -20,4 +20,4 @@ app.listen(port, () => {
 })
 
 const router = routes.init()
-app.use('/api', router)
+app.use('/', router)
