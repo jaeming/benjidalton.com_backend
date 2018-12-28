@@ -6,7 +6,12 @@ import User from '../models/user'
 export default {
 
   async index (req, resp) {
-    const comments = await Comment.find()
+    let query = {}
+    if (req.query.post) {
+      let post = await Post.findOne({slug: req.query.post})
+      if (post) { query = {post: post._id} }
+    }
+    const comments = await Comment.find(query)
     resp.json(comments)
   },
 

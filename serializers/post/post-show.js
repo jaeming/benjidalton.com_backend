@@ -6,13 +6,7 @@ export const show = (post) => {
     author: post.author.name,
     date: post.date,
     body: post.body,
-    published: post.published
-    // comments: post.comments.map(comment => {
-    //   return {
-    //     id: comment._id,
-    //     body: comment.text,
-    //     user: comment.author.name
-    //   }
-    // })
+    published: post.published,
+    comment_count: post.comments.length
   }
 }
