@@ -26,12 +26,13 @@ export default {
     // todo
   },
 
-  userParams (attr) {
+  async userParams (attr) {
+    const password = await bcrypt.hash(attr.password, 8)
     return {
       name: attr.name,
       email: attr.email,
       roles: ['commenter'],
-      password: bcrypt.hashSync(attr.password, 8)
+      password
     }
   }
 
