@@ -9,7 +9,7 @@ export default {
     try {
       const session = await Auth.createToken(user, req.body.password)
       if (!session.authenticated) { return resp.status(401).send({msg: 'incorrect login'}) }
-      resp.json(session)
+      resp.json(session.token)
     } catch (error) {
       resp.status(401).send({msg: error})
     }
