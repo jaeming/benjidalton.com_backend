@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r esm app.js",
-    "prod": "pm2 start app.js --node-args='-r esm'",
+    "prod": "env $(cat .env) pm2 start app.js --node-args='-r esm'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "benjidalton",
