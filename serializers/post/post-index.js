@@ -9,7 +9,7 @@ export const index = (posts) => {
       author: post.author.name,
       comment_count: post.comments.length,
       date: post.date,
-      preview: truncate(post.body, 30)
+      preview: truncate(post.body, 500)
     }
   })
 }
