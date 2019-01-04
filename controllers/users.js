@@ -10,7 +10,8 @@ export default {
 
   async create (req, resp) {
     try {
-      const user = await User.create(this.userParams(req.body))
+      const params = await this.userParams(req.body)
+      const user = await User.create(params)
       const {id, email, name, roles} = user
       resp.json({id, email, name, roles})
     } catch (err) {

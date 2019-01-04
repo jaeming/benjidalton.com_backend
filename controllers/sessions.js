@@ -11,7 +11,7 @@ export default {
       if (!session) { return resp.status(401).send({msg: 'incorrect login'}) }
       resp.json(session)
     } catch (error) {
-      resp.status(500).send({msg: error})
+      resp.status(401).send({msg: error})
     }
   }
 
