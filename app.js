@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import express from 'express'
-import routes from './config/routes'
+import router from './routes'
 import database from './config/database'
 import parser from 'body-parser'
 import cors from 'cors'
@@ -19,5 +19,4 @@ app.listen(port, () => {
   console.log('server started...happy hunting')
 })
 
-const router = routes.init()
 app.use('/', router)

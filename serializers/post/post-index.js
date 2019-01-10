@@ -6,6 +6,7 @@ export const index = (posts) => {
       id: post._id,
       slug: post.slug,
       title: post.title,
+      body: post.body,
       author: post.author.name,
       comment_count: post.comments.length,
       date: post.date,

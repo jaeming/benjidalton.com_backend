@@ -22,7 +22,8 @@
     "html-truncate": "^1.2.2",
     "jsonwebtoken": "^8.3.0",
     "mongodb": "^3.0.10",
-    "mongoose": "^5.1.4"
+    "mongoose": "^5.1.4",
+    "multer": "^1.4.1"
   },
   "devDependencies": {
     "eslint-config-google": "^0.9.1",
