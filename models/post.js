@@ -4,6 +4,7 @@ const Schema = db.Schema
 const postSchema = new Schema({
   title: String,
   body: String,
+  summary: String,
   date: { type: Date, default: Date.now },
   published: Boolean,
   slug: { type: String, unique: true, index: true },

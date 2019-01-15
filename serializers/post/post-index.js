@@ -1,5 +1,3 @@
-import truncate from 'html-truncate'
-
 export const index = (posts) => {
   return posts.map((post) => {
     return {
@@ -10,7 +8,7 @@ export const index = (posts) => {
       author: post.author.name,
       comment_count: post.comments.length,
       date: post.date,
-      preview: truncate(post.body, 500)
+      summary: post.summary || post.body
     }
   })
 }

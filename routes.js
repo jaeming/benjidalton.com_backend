@@ -25,5 +25,6 @@ router.get('/comments/:id', (req, res) => comments.show(req, res))
 router.put('/comments/:id', (req, res) => comments.update(req, res))
 
 router.post('/images', upload.single('image'), (req, res) => images.create(req, res))
+router.get('/images/:name', (req, res) => images.show(req, res))
 
 export default router
