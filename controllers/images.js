@@ -4,8 +4,7 @@ import path from 'path'
 import Image from '../models/image'
 
 const authorizedClient = (req, resp) => {
-  console.log(req.hostname)
-  const isAllowed = host.clients.includes(req.hostname)
+  const isAllowed = host.clients.includes(req.header('origin'))
   if (isAllowed) {
     return true
   } else {
