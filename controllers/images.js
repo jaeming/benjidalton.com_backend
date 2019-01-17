@@ -16,6 +16,7 @@ export default {
 
   async show (req, resp) {
     let image = await Image.findOne({ name: req.params.name })
+    if (!image) { resp.status(404).json({error: 'Not Found'}) }
     fs.createReadStream(path.join('uploads/images/', image.name)).pipe(resp)
   }
 }
