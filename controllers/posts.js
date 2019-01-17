@@ -6,7 +6,7 @@ import serializer from '../serializers/post'
 export default {
 
   async index (req, resp) {
-    let posts = await Post.find().populate('author')
+    let posts = await Post.find().populate('author').sort({date: -1})
     let json = serializer.index(posts)
     resp.json(json)
   },
