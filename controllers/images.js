@@ -1,22 +1,14 @@
-import host from '../config/host'
-import fs from 'fs'
-import path from 'path'
 import Image from '../models/image'
 
 export default {
   create (req, resp) {
     let image = new Image({
-      name: req.file.filename,
+      name: req.file.key,
       contentType: req.body,
-      meta: req.file
+      meta: req.file,
+      url: req.file.location
     })
     image.save()
-    resp.json({ url: `${host.url}/images/${image.name}` })
-  },
-
-  async show (req, resp) {
-    let image = await Image.findOne({ name: req.params.name })
-    if (!image) { resp.status(404).json({error: 'Not Found'}) }
-    fs.createReadStream(path.join('uploads/images/', image.name)).pipe(resp)
+    resp.json({url: image.url})
   }
 }
