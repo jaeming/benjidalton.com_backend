@@ -3,7 +3,7 @@ import Controllers from './controllers'
 import { Upload } from './config/uploader'
 
 const router = express.Router()
-const {home, sessions, posts, users, comments, images} = Controllers
+const {home, sessions, posts, users, comments, images, imagesFlickr} = Controllers
 
 router.get('/', (req, res) => home.show(req, res))
 
@@ -28,6 +28,8 @@ router.post('/comments', (req, res) => comments.create(req, res))
 router.get('/comments/:id', (req, res) => comments.show(req, res))
 router.put('/comments/:id', (req, res) => comments.update(req, res))
 
+// images
 router.post('/images', Upload.single('image'), (req, res) => images.create(req, res))
+router.get('/images/flickr', (req, res) => imagesFlickr.index(req, res))
 
 export default router

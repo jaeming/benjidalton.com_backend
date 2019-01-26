@@ -4,6 +4,7 @@ import comments from './comments'
 import users from './users'
 import posts from './posts'
 import images from './images'
+import imagesFlickr from './images_flickr'
 
 export default {
   home,
@@ -11,5 +12,6 @@ export default {
   users,
   sessions,
   posts,
-  images
+  images,
+  imagesFlickr
 }
