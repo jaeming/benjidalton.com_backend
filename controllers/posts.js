@@ -17,7 +17,7 @@ export default {
     resp.json(json)
   },
 
-  async create (req, resp) {
+  create (req, resp) {
     let user = this.user(req)
     if (user && user.roles.includes('admin')) {
       let post = new Post(this.postParams(req.body))
