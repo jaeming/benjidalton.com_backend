@@ -32,7 +32,7 @@ router.put('/comments/:id', (req, res) => comments.update(req, res))
 router.post('/images', Upload.single('image'), (req, res) => images.create(req, res))
 router.get('/images/flickr', (req, res) => imagesFlickr.index(req, res))
 
-router.post('/songs', Upload.single('song'), (req, res) => songs.create(req, res))
+router.post('/songs', Upload.array('songs', 12), (req, res) => songs.create(req, res))
 router.get('/songs', (req, res) => songs.index(req, res))
 router.get('/songs/:slug', (req, res) => songs.show(req, res))
 

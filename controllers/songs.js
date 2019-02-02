@@ -12,15 +12,27 @@ export default {
     resp.json(song)
   },
 
-  create (req, resp) {
-    let song = new Song({
-      slug: helpers.slugify(req.file.key),
-      name: req.file.key,
-      contentType: req.body,
-      meta: req.file,
-      url: req.file.location
+  async create (req, resp) {
+    const songs = req.files.map((file) => {
+      const params = this.songParams(file)
+      let song = new Song(params)
+      return song.save()
     })
-    song.save()
-    resp.json({url: song.url})
+    try {
+      const uploads = await Promise.all(songs)
+      resp.json(uploads)
+    } catch (error) {
+      resp.status(500).json({error})
+    }
+  },
+
+  songParams (file) {
+    return {
+      slug: helpers.slugify(file.originalname),
+      name: file.originalname,
+      contentType: file.mimetype,
+      size: file.size,
+      url: file.location
+    }
   }
 }

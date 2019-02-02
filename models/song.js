@@ -5,7 +5,7 @@ const songSchema = new Schema({
   slug: { type: String, unique: true, index: true },
   name: String,
   contentType: Object,
-  meta: Object,
+  size: Number,
   url: String
 })
 
