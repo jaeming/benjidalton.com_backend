@@ -27,8 +27,9 @@ export default {
   },
 
   songParams (file) {
+    const slug = helpers.slugify(file.originalname).replace('mp3', '')
     return {
-      slug: helpers.slugify(file.originalname),
+      slug,
       name: file.originalname,
       contentType: file.mimetype,
       size: file.size,
