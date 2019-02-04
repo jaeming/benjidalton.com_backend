@@ -6,6 +6,7 @@ import posts from './posts'
 import images from './images'
 import imagesFlickr from './images_flickr'
 import songs from './songs'
+import messages from './messages'
 
 export default {
   home,
@@ -15,5 +16,6 @@ export default {
   posts,
   images,
   imagesFlickr,
-  songs
+  songs,
+  messages
 }
