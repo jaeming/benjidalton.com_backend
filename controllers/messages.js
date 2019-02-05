@@ -1,5 +1,4 @@
 import Message from '../models/message'
-import Banned from '../lib/banned_users'
 import Auth from '../lib/auth'
 
 export default {
@@ -26,10 +25,14 @@ export default {
   async create (req, resp) {
     let user = this.user(req)
     if (!user) {
-      return resp.status(401).json({error: 'User not Authorized'})
+      let msg = {error: 'User not Authorized'}
+      return resp.status(401).json(msg)
+    }
+    if (user.banned) {
+      let msg = {error: 'You have been banned. Contact admin'}
+      return resp.status(401).json(msg)
     }
     const {from, subject, text} = req.body
-    if (await Banned(from)) { return }
     const message = new Message({from, subject, text, user})
     message.save()
     resp.json(message)
