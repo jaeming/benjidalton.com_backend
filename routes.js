@@ -3,7 +3,7 @@ import Controllers from './controllers'
 import { Upload } from './config/uploader'
 
 const router = express.Router()
-const {home, sessions, posts, users, comments, images, imagesFlickr, songs} = Controllers
+const {home, sessions, posts, users, comments, images, imagesFlickr, songs, messages} = Controllers
 
 router.get('/', (req, res) => home.show(req, res))
 
@@ -32,8 +32,16 @@ router.put('/comments/:id', (req, res) => comments.update(req, res))
 router.post('/images', Upload.single('image'), (req, res) => images.create(req, res))
 router.get('/images/flickr', (req, res) => imagesFlickr.index(req, res))
 
+// songs
 router.post('/songs', Upload.array('songs', 12), (req, res) => songs.create(req, res))
 router.get('/songs', (req, res) => songs.index(req, res))
 router.get('/songs/:slug', (req, res) => songs.show(req, res))
+
+// messages
+router.post('/messages', (req, res) => messages.create(req, res))
+router.get('/messages', (req, res) => messages.index(req, res))
+router.get('/messages/:id', (req, res) => messages.show(req, res))
+router.put('/messages/:id', (req, res) => messages.update(req, res))
+router.delete('/messages/:id', (req, res) => messages.delete(req, res))
 
 export default router
