@@ -1,7 +1,7 @@
 import Auth from '../lib/auth'
 import Comment from '../models/comment'
 import Post from '../models/post'
-import User from '../models/user'
+import response from '../helpers/response'
 
 export default {
 
@@ -19,21 +19,18 @@ export default {
     let query = Comment.findById(req.params.id)
     query.exec()
       .then((comment) => resp.json(comment))
-      .catch((error) => resp.send(error))
+      .catch((error) => response.error(resp, error))
   },
 
   async create (req, resp) {
-    const CurrentUser = await Auth.verify(req.headers.authorization)
-    if (!CurrentUser) {
-      resp.status(401).json({error: 'User not Authorized'})
-      return
-    }
+    let user = this.user(req)
+    if (!user) { return response.unauthorized(resp) }
     try {
       const post = await Post.findById(req.body.post_id)
       let comment = new Comment({
         text: req.body.text,
-        post: post._id,
-        author: CurrentUser.id
+        post: post.id,
+        author: user.id
       })
       comment.save()
       post.comments.push(comment)
@@ -44,33 +41,30 @@ export default {
         message: 'created'
       })
     } catch (err) {
-      resp.status(500).json({error: err})
+      return response.error(resp, err)
     }
   },
 
   async update (req, resp) {
     try {
-      let token = await Auth.verify(req.headers.authorization)
-      const currentUser = await User.findById(token.id)
-      if (!currentUser) {
-        resp.status(401).json({error: 'User not Authorized'})
-        return
-      }
-      const comment = await Comment.findById(req.params.id).populate('author')
-      if ((currentUser._id === comment.author._id) || currentUser.roles.includes('admin')) {
+      let user = this.user(req)
+      const comment = await Comment.findById(req.params.id)
+      const allowed = user && (user.id === comment.author || user.roles.includes('admin'))
+      if (allowed) {
         comment.text = req.body.text
         comment.edited = Date.now()
         comment.save()
-        resp.json({
-          comment: comment,
-          message: 'Updated'
-        })
+        resp.json(comment)
       } else {
-        resp.status(401).json({error: 'Not Authorized'})
+        return response.unauthorized(resp)
       }
     } catch (err) {
-      resp.status(500).json({error: err})
+      return response.error(resp, err)
     }
+  },
+
+  user (req) {
+    return Auth.verify(req.headers.authorization)
   }
 
 }

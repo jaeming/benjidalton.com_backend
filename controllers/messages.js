@@ -1,62 +1,57 @@
 import Message from '../models/message'
+import User from '../models/user'
 import Auth from '../lib/auth'
+import response from '../helpers/response'
+import serializer from '../serializers/message'
 
 export default {
   async index (req, resp) {
     let user = this.user(req)
-    if (user && user.roles.includes('admin')) {
-      const messages = await Message.find()
-      resp.json(messages)
-    } else {
-      return resp.status(401).json({error: 'User not Authorized'})
-    }
+    if (!user) { return response.unauthorized(resp) }
+    const messages = await Message.find({to: user.id}).populate('from')
+    let json = serializer.index(messages)
+    resp.json(json)
   },
 
   async show (req, resp) {
     let user = this.user(req)
-    if (user && user.roles.includes('admin')) {
-      const message = await Message.findOne({id: req.params.id})
-      resp.json(message)
-    } else {
-      return resp.status(401).json({error: 'User not Authorized'})
-    }
+    if (!user) { return response.unauthorized(resp) }
+    const message = await Message.findOne({_id: req.params.id, to: user.id})
+    resp.json(message)
   },
 
   async create (req, resp) {
     let user = this.user(req)
-    if (!user) {
-      let msg = {error: 'User not Authorized'}
-      return resp.status(401).json(msg)
+    if (!user || (user && user.banned)) { return response.unauthorized(resp) }
+    let {from, subject, text, to} = req.body
+    if (!to) {
+      to = await User.findOne({email: process.env.SITE_OWNER})
     }
-    if (user.banned) {
-      let msg = {error: 'You have been banned. Contact admin'}
-      return resp.status(401).json(msg)
-    }
-    const {from, subject, text} = req.body
-    const message = new Message({from, subject, text, user})
+    const message = new Message({from, to, subject, text, user})
     message.save()
     resp.json(message)
   },
 
   async update (req, resp) {
     let user = this.user(req)
-    if (user && user.roles.includes('admin')) {
-      const message = await Message.findOne({id: req.params.id})
+    const message = await Message.findOne({_id: req.params.id}).populate('to')
+    if (user && user.id === message.to.id) {
       Object.assign(message, {read: req.body.read})
       await message.save()
       resp.json({message})
     } else {
-      return resp.status(401).json({error: 'User not Authorized'})
+      return response.unauthorized(resp)
     }
   },
 
   async delete (req, resp) {
     let user = this.user(req)
-    if (user && user.roles.includes('admin')) {
-      await Message.findOneAndDelete({id: req.params.id})
+    const message = await Message.findOne({_id: req.params.id})
+    if (user && user.id === message.to) {
+      message.remove()
       resp.json({delete: 'ok'})
     } else {
-      return resp.status(401).json({error: 'User not Authorized'})
+      return response.unauthorized(resp)
     }
   },
 

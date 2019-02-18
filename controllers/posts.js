@@ -2,6 +2,7 @@ import Auth from '../lib/auth'
 import Post from '../models/post'
 import helpers from '../helpers'
 import serializer from '../serializers/post'
+import response from '../helpers/response'
 
 export default {
 
@@ -25,7 +26,7 @@ export default {
       post.save()
       resp.json({post, message: 'created'})
     } else {
-      resp.status(401).json({error: 'User not Authorized'})
+      return response.unauthorized(resp)
     }
   },
 
@@ -38,7 +39,7 @@ export default {
       await post.save()
       resp.json({post, message: 'updated'})
     } else {
-      resp.status(401).json({error: 'User not Authorized'})
+      return response.unauthorized(resp)
     }
   },
 
@@ -50,7 +51,7 @@ export default {
       post.remove()
       resp.json({delete: 'ok'})
     } else {
-      resp.status(401).json({error: 'User not Authorized'})
+      return response.unauthorized(resp)
     }
   },
 

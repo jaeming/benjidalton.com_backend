@@ -1,6 +1,7 @@
 import Song from '../models/song'
 import helpers from '../helpers'
 import Auth from '../lib/auth'
+import response from '../helpers/response'
 
 export default {
   async index (req, resp) {
@@ -28,7 +29,7 @@ export default {
         resp.status(500).json({error})
       }
     } else {
-      return resp.status(401).json({error: 'User not Authorized'})
+      return response.unauthorized(resp)
     }
   },
 

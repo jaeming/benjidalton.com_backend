@@ -1,11 +1,12 @@
 import Image from '../models/image'
 import Auth from '../lib/auth'
+import response from '../helpers/response'
 
 export default {
   create (req, resp) {
-    const currentUser = Auth.verify(req.headers.authorization)
-    if (!currentUser) {
-      return resp.status(401).json({error: 'User not Authorized'})
+    const user = Auth.verify(req.headers.authorization)
+    if (!user || !user.roles.includes('admin')) {
+      return response.unauthorized(resp)
     }
     let image = new Image({
       name: req.file.key,
