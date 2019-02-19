@@ -1,7 +1,5 @@
 import Song from '../models/song'
 import helpers from '../helpers'
-import Auth from '../lib/auth'
-import response from '../helpers/response'
 
 export default {
   async index (req, resp) {
@@ -15,21 +13,16 @@ export default {
   },
 
   async create (req, resp) {
-    const currentUser = Auth.verify(req.headers.authorization)
-    if (currentUser && currentUser.roles.includes('admin')) {
-      const songs = req.files.map((file) => {
-        const params = this.songParams(file)
-        let song = new Song(params)
-        return song.save()
-      })
-      try {
-        const uploads = await Promise.all(songs)
-        resp.json(uploads)
-      } catch (error) {
-        resp.status(500).json({error})
-      }
-    } else {
-      return response.unauthorized(resp)
+    const songs = req.files.map((file) => {
+      const params = this.songParams(file)
+      let song = new Song(params)
+      return song.save()
+    })
+    try {
+      const uploads = await Promise.all(songs)
+      resp.json(uploads)
+    } catch (error) {
+      resp.status(500).json({error})
     }
   },
 

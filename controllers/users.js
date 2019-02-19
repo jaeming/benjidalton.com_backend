@@ -32,7 +32,7 @@ export default {
     return {
       name: attr.name,
       email: attr.email,
-      roles: ['commenter'],
+      roles: ['commenter', 'messenger'],
       password
     }
   }

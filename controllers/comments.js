@@ -1,4 +1,3 @@
-import Auth from '../lib/auth'
 import Comment from '../models/comment'
 import Post from '../models/post'
 import response from '../helpers/response'
@@ -23,14 +22,12 @@ export default {
   },
 
   async create (req, resp) {
-    let user = this.user(req)
-    if (!user) { return response.unauthorized(resp) }
     try {
       const post = await Post.findById(req.body.post_id)
       let comment = new Comment({
         text: req.body.text,
         post: post.id,
-        author: user.id
+        author: req.user.id
       })
       comment.save()
       post.comments.push(comment)
@@ -47,9 +44,8 @@ export default {
 
   async update (req, resp) {
     try {
-      let user = this.user(req)
-      const comment = await Comment.findById(req.params.id)
-      const allowed = user && (user.id === comment.author || user.roles.includes('admin'))
+      const comment = await Comment.findById(req.params.id).populate('author')
+      const allowed = req.user && (comment.author.equals(req.user.id) || req.user.roles.includes('admin'))
       if (allowed) {
         comment.text = req.body.text
         comment.edited = Date.now()
@@ -61,10 +57,6 @@ export default {
     } catch (err) {
       return response.error(resp, err)
     }
-  },
-
-  user (req) {
-    return Auth.verify(req.headers.authorization)
   }
 
 }
