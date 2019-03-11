@@ -1,5 +1,7 @@
 import bcrypt from 'bcryptjs'
 import User from '../models/user'
+import Auth from '../lib/auth'
+import response from '../helpers/response'
 
 export default {
 
@@ -12,8 +14,9 @@ export default {
     try {
       const params = await this.userParams(req.body)
       const user = await User.create(params)
-      const {id, email, name, roles} = user
-      resp.json({id, email, name, roles})
+      const session = await Auth.createToken(user, req.body.password)
+      if (!session.authenticated) { return response.unauthorized(resp) }
+      resp.json(session.token)
     } catch (err) {
       if (err.code === 11000) {
         resp.status(500).json({error: 'User already exists'})
