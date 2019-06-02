@@ -5,17 +5,21 @@ import database from './config/database'
 import parser from 'body-parser'
 import cors from 'cors'
 
-database.init()
+try {
+  database.init()
 
-const app = express()
-let port = process.env.PORT || 3000
+  const app = express()
+  let port = process.env.PORT || 3000
 
-app.use(cors())
+  app.use(cors())
 
-app.use(parser.json())
+  app.use(parser.json())
 
-app.listen(port, () => {
-  console.log('server started...happy hunting')
-})
+  app.listen(port, () => {
+    console.log('server started...happy hunting')
+  })
 
-app.use('/', router)
+  app.use('/', router)
+} catch (error) {
+  console.log(error)
+}
