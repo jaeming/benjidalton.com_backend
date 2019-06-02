@@ -1,6 +1,6 @@
 export const show = (post) => {
   return {
-    id: post._id,
+    id: post.id,
     slug: post.slug,
     title: post.title,
     author: post.author.name,
