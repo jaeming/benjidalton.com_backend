@@ -44,6 +44,7 @@ export default {
   postParams (attr) {
     return {
       title: attr.title,
+      summary: attr.summary,
       body: attr.body,
       published: attr.published,
       slug: helpers.slugify(attr.title),

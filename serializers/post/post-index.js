@@ -1,5 +1,5 @@
 export const index = (posts) => {
-  return posts.map((post) => {
+  return posts.map(post => {
     return {
       id: post._id,
       slug: post.slug,
@@ -8,7 +8,7 @@ export const index = (posts) => {
       author: post.author.name,
       comment_count: post.comments.length,
       date: post.date,
-      summary: post.summary || post.body
+      summary: post.summary
     }
   })
 }
