@@ -7,6 +7,7 @@ import images from './images'
 import imagesFlickr from './images_flickr'
 import songs from './songs'
 import messages from './messages'
+import contacts from './contacts'
 
 export default {
   home,
@@ -17,5 +18,6 @@ export default {
   images,
   imagesFlickr,
   songs,
-  messages
+  messages,
+  contacts
 }

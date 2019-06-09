@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 
-let envs;
+let envs
 if (process.env.NODE_ENV !== 'production') {
   envs = dotenv.config()
 }
