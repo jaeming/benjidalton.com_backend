@@ -17,10 +17,10 @@ export default {
     resp.json(json)
   },
 
-  create (req, resp) {
-    let post = new Post(this.postParams(req.body))
+  async create (req, resp) {
+    let post = new Post(postParams(req.body))
     post.author = req.user.id
-    post.save()
+    await post.save()
     resp.json({post, message: 'created'})
   },
 
@@ -28,7 +28,7 @@ export default {
     let post = await Post.findOne({slug: req.params.slug}).populate('author')
     const allowed = req.user.roles.includes('admin') || post.author.equals(req.user.id)
     if (!allowed) { return response.unauthorized(resp) }
-    Object.assign(post, this.postParams(req.body))
+    Object.assign(post, postParams(req.body))
     await post.save()
     resp.json({post, message: 'updated'})
   },
@@ -39,16 +39,16 @@ export default {
     if (!allowed) { return response.unauthorized(resp) }
     post.remove()
     resp.json({delete: 'ok'})
-  },
+  }
+}
 
-  postParams (attr) {
-    return {
-      title: attr.title,
-      summary: attr.summary,
-      body: attr.body,
-      published: attr.published,
-      slug: helpers.slugify(attr.title),
-      date: Date.now()
-    }
+function postParams (attr) {
+  return {
+    title: attr.title,
+    summary: attr.summary,
+    body: attr.body,
+    published: attr.published,
+    slug: helpers.slugify(attr.title),
+    date: Date.now()
   }
 }

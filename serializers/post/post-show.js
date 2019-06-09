@@ -3,6 +3,7 @@ export const show = (post) => {
     id: post.id,
     slug: post.slug,
     title: post.title,
+    summary: post.summary,
     author: post.author.name,
     date: post.date,
     body: post.body,
