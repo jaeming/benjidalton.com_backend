@@ -14,7 +14,7 @@ export default {
 
   async create (req, resp) {
     const songs = req.files.map((file) => {
-      const params = this.songParams(file)
+      const params = songParams(file)
       let song = new Song(params)
       return song.save()
     })
@@ -24,16 +24,16 @@ export default {
     } catch (error) {
       resp.status(500).json({error})
     }
-  },
+  }
+}
 
-  songParams (file) {
-    const slug = helpers.slugify(file.originalname).replace('mp3', '')
-    return {
-      slug,
-      name: file.originalname,
-      contentType: file.mimetype,
-      size: file.size,
-      url: file.location
-    }
+function songParams (file) {
+  const slug = helpers.slugify(file.originalname).replace('mp3', '')
+  return {
+    slug,
+    name: file.originalname,
+    contentType: file.mimetype,
+    size: file.size,
+    url: file.location
   }
 }

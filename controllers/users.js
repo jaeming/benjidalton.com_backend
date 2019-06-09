@@ -12,7 +12,7 @@ export default {
 
   async create (req, resp) {
     try {
-      const params = await this.userParams(req.body)
+      const params = await userParams(req.body)
       const user = await User.create(params)
       const session = await Auth.createToken(user, req.body.password)
       if (!session.authenticated) { return response.unauthorized(resp) }
@@ -28,16 +28,15 @@ export default {
 
   update () {
     // todo
-  },
-
-  async userParams (attr) {
-    const password = await bcrypt.hash(attr.password, 8)
-    return {
-      name: attr.name,
-      email: attr.email,
-      roles: ['commenter', 'messenger'],
-      password
-    }
   }
+}
 
+function userParams (attr) {
+  const password = bcrypt.hashSync(attr.password, 8)
+  return {
+    name: attr.name,
+    email: attr.email,
+    roles: ['commenter', 'messenger'],
+    password
+  }
 }
