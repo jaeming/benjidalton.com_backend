@@ -20,7 +20,7 @@
     "express": "^4.16.3",
     "flickr-sdk": "^3.8.0",
     "global": "^4.3.2",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^3.0.10",
     "mongoose": "^5.7.5",
     "multer": "^1.4.2",
